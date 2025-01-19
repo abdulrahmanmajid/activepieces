@@ -494,5 +494,6 @@
   "Select a project role": "Select a project role",
   "Steps in this flow": "Steps in this flow",
   "Reconnect {displayName} Connection": "Reconnect {displayName}",
-  "flowsImported": "{flowsCount, plural, =0 {No Flows Imported} =1 {Flow Imported Successfully} other {Flows Imported Successfully}}"
+  "flowsImported": "{flowsCount, plural, =0 {No Flows Imported} =1 {Flow Imported Successfully} other {Flows Imported Successfully}}",
+  "AI Settings": "AI Settings"
 }

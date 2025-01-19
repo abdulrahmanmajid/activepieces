@@ -27,8 +27,16 @@ export const authenticationService = (log: FastifyBaseLogger) => ({
                 platformId: params.platformId,
             })
         }
+
+        const userIdentity = await userIdentityService(log).create(params)
+
+        // In CE, always create a new platform and project
+        if (system.getEdition() === ApEdition.COMMUNITY) {
+            return createUserAndPlatform(userIdentity, log)
+        }
+
+        // For EE and Cloud, check if platformId exists
         if (isNil(params.platformId)) {
-            const userIdentity = await userIdentityService(log).create(params)
             return createUserAndPlatform(userIdentity, log)
         }
 
@@ -36,7 +44,7 @@ export const authenticationService = (log: FastifyBaseLogger) => ({
             email: params.email,
             platformId: params.platformId,
         })
-        const userIdentity = await userIdentityService(log).create(params)
+
         await userIdentityService(log).verify(userIdentity.id)
         const user = await userService.create({
             identityId: userIdentity.id,
@@ -167,7 +175,7 @@ export const authenticationService = (log: FastifyBaseLogger) => ({
 async function createUserAndPlatform(userIdentity: UserIdentity, log: FastifyBaseLogger): Promise<AuthenticationResponse> {
     const user = await userService.create({
         identityId: userIdentity.id,
-        platformRole: PlatformRole.ADMIN,
+        platformRole: PlatformRole.MEMBER,
         platformId: null,
     })
     const platform = await platformService.create({

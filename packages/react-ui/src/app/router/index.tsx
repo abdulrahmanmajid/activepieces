@@ -68,6 +68,7 @@ import TeamPage from '../routes/settings/team';
 import { SignInPage } from '../routes/sign-in';
 import { SignUpPage } from '../routes/sign-up';
 import { ShareTemplatePage } from '../routes/templates/share-template';
+import AiSettingsPage from '../routes/settings/ai';
 
 import { AfterImportFlowRedirect } from './after-import-flow-redirect';
 import { DefaultRoute } from './default-route';
@@ -637,6 +638,22 @@ const routes = [
       </PageTitle>
     ),
   },
+  {
+    path: '/platform/setup/ai',
+    element: <AiSettingsPage />,
+  },
+  ...ProjectRouterWrapper({
+    path: '/settings/ai',
+    element: (
+      <DashboardContainer>
+        <ProjectSettingsLayout>
+          <PageTitle title="AI Settings">
+            <AIProvidersPage />
+          </PageTitle>
+        </ProjectSettingsLayout>
+      </DashboardContainer>
+    ),
+  }),
 ];
 const ApRouter = () => {
   const { embedState } = useEmbedding();

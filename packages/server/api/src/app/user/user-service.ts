@@ -113,10 +113,11 @@ export const userService = {
     async addOwnerToPlatform({
         id,
         platformId,
-    }: UpdatePlatformIdParams): Promise<void> {
+        role = PlatformRole.MEMBER,
+    }: UpdatePlatformIdParams & { role?: PlatformRole }): Promise<void> {
         await userRepo().update(id, {
             updated: dayjs().toISOString(),
-            platformRole: PlatformRole.ADMIN,
+            platformRole: role,
             platformId,
         })
     },

@@ -11,7 +11,8 @@ import {
     PlatformWithoutSensitiveData,
     spreadIfDefined,
     UpdatePlatformRequestBody,
-    UserId } from '@activepieces/shared'
+    UserId,
+    PlatformRole } from '@activepieces/shared'
 import { In } from 'typeorm'
 import { repoFactory } from '../core/db/repo-factory'
 import { defaultTheme } from '../flags/theme'
@@ -87,6 +88,7 @@ export const platformService = {
         await userService.addOwnerToPlatform({
             id: ownerId,
             platformId: savedPlatform.id,
+            role: PlatformRole.MEMBER,
         })
         
         return savedPlatform

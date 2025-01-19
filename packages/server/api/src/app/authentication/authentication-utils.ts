@@ -1,5 +1,5 @@
 import { AppSystemProp } from '@activepieces/server-shared'
-import { ActivepiecesError, ApEdition, ApEnvironment, AuthenticationResponse, ErrorCode, isNil, Principal, PrincipalType, Project, TelemetryEventName, User, UserIdentity, UserIdentityProvider, UserStatus } from '@activepieces/shared'
+import { ActivepiecesError, ApEdition, ApEnvironment, AuthenticationResponse, ErrorCode, isNil, Principal, PrincipalType, Project, TelemetryEventName, User, UserIdentity, UserIdentityProvider, UserStatus, PlatformRole, SignUpRequest } from '@activepieces/shared'
 import { FastifyBaseLogger } from 'fastify'
 import { system } from '../helper/system/system'
 import { telemetry } from '../helper/telemetry.utils'
@@ -15,15 +15,20 @@ export const authenticationUtils = {
         email,
         platformId,
     }: AssertUserIsInvitedToPlatformOrProjectParams): Promise<void> {
+        if (system.getEdition() === ApEdition.COMMUNITY) {
+            return
+        }
+
         const isInvited = await userInvitationsService(log).hasAnyAcceptedInvitations({
             platformId,
             email,
         })
+
         if (!isInvited) {
             throw new ActivepiecesError({
                 code: ErrorCode.INVITATION_ONLY_SIGN_UP,
                 params: {
-                    message: 'User is not invited to the platform',
+                    message: 'Sign up is restricted. You need an invitation to join.',
                 },
             })
         }
@@ -194,6 +199,33 @@ export const authenticationUtils = {
         const project = await projectService.getOneOrThrow(principal.projectId)
         return project.ownerId
     },
+
+    async generateAuthTokens(userIdentity: UserIdentity, platformId: string, projectId: string): Promise<AuthenticationResponse> {
+        const token = await accessTokenManager.generateToken({
+            id: userIdentity.id,
+            type: PrincipalType.USER,
+            platform: {
+                id: platformId,
+            },
+            projectId: projectId,
+            tokenVersion: userIdentity.tokenVersion,
+        })
+
+        return {
+            id: userIdentity.id,
+            email: userIdentity.email,
+            firstName: userIdentity.firstName,
+            lastName: userIdentity.lastName,
+            trackEvents: userIdentity.trackEvents,
+            newsLetter: userIdentity.newsLetter,
+            verified: userIdentity.verified,
+            platformId: platformId,
+            platformRole: PlatformRole.ADMIN,
+            token,
+            projectId: projectId,
+            status: UserStatus.ACTIVE,
+        }
+    }
 }
 
 type SendTelemetryParams = {
@@ -222,4 +254,43 @@ type GetProjectAndTokenParams = {
     userId: string
     platformId: string
     projectId: string | null
+}
+
+export const authenticationService = {
+    async signUp(request: SignUpRequest): Promise<AuthenticationResponse> {
+        const userIdentity = await userIdentityService(system.globalLogger()).create({
+            email: request.email,
+            password: request.password,
+            firstName: request.firstName,
+            lastName: request.lastName,
+            trackEvents: request.trackEvents,
+            newsLetter: request.newsLetter,
+            provider: UserIdentityProvider.EMAIL,
+        })
+
+        if (system.getEdition() === ApEdition.COMMUNITY) {
+            await userIdentityService(system.globalLogger()).verify(userIdentity.id)
+            
+            const platform = await platformService.create({
+                ownerId: userIdentity.id,
+                name: `${request.firstName}'s Workspace`,
+            })
+
+            const user = await userService.create({
+                identityId: userIdentity.id,
+                platformRole: PlatformRole.ADMIN,
+                platformId: platform.id,
+            })
+
+            const project = await projectService.create({
+                displayName: `My First Project`,
+                ownerId: user.id,
+                platformId: platform.id,
+            })
+
+            return authenticationUtils.generateAuthTokens(userIdentity, platform.id, project.id)
+        }
+
+        return authenticationUtils.generateAuthTokens(userIdentity, '', '')
+    }
 }

@@ -110,20 +110,20 @@ export function Sidebar({
     <div>
       <div className="flex min-h-screen w-full  ">
         {!hideSideNav && (
-          <aside className=" border-r sticky  top-0 h-screen bg-muted/50 w-[65px] ">
+          <aside className="border-r sticky top-0 h-screen bg-muted/50 w-[75px]">
             <ScrollArea>
               <nav className="flex flex-col items-center h-screen  sm:py-5  gap-5 p-2 ">
                 <Link
                   to={isHomeDashboard ? defaultRoute : '/platform'}
-                  className="h-[48px] items-center justify-center "
+                  className="h-[60px] flex items-center justify-center"
                 >
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <img
                         src={branding.logos.logoIconUrl}
                         alt={t('home')}
-                        width={28}
-                        height={28}
+                        width={50}
+                        height={50}
                       />
                     </TooltipTrigger>
                     <TooltipContent side="right">{t('Home')}</TooltipContent>
@@ -151,7 +151,7 @@ export function Sidebar({
                       newWindow={true}
                     />
                     <CustomTooltipLink
-                      to="https://activepieces.com/docs"
+                      to="https://docs.kallabot.com"
                       label={t('Docs')}
                       Icon={FileTextIcon}
                       newWindow={true}

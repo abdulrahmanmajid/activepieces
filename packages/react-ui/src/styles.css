@@ -23,10 +23,10 @@
     --muted-foreground: 220 8.9% 46.1%;
     --accent: 220 14.3% 95.9%;
     --accent-foreground: 220.9 39.3% 11%;
-    --border: 220 13% 87%;
-    --input: 220 13% 87%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
     --ring: 262.1 83.3% 57.8%;
-    --radius: 0.75rem;
+    --radius: 12px;
 
     --primary-100: 257 75% 85%;
     --primary: 257 74% 57%;
@@ -41,11 +41,9 @@
     --success: 148 48% 46%;
     --success-300: 148 48% 40%;
 
-
     --warning-100: 51.72, 93.55%, 93.92%;
     --warning: 47 96% 53%;
     --warning-300: 28 80% 31%;
-
     --add-button-shadow: 0px 0px 0px 6px hsl(var(--primary-100));
 
     --light-blue: 214 16% 70%;
@@ -57,47 +55,35 @@
   }
 
   .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
-    --card-foreground: 0 0% 95%;
-
+    --background: 0 0% 7%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 9%;
+    --card-foreground: 0 0% 98%;
     --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 95%;
-
-    --secondary: 240 3.7% 15.9%;
+    --popover-foreground: 0 0% 98%;
+    --secondary: 0 0% 14%;
     --secondary-foreground: 0 0% 98%;
-
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-
-    --accent: 12 6.5% 15.1%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 63%;
+    --accent: 0 0% 14%;
     --accent-foreground: 0 0% 98%;
-
-    --border: 240 3.7% 35%;
-    --input: 240 3.7% 35%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
-
     --primary-100: 257 74% 25%;
-    --primary: 257 74% 57%;
+    --primary: 0 0% 98%;
     --primary-300: 257 75% 85%;
-    --primary-foreground: 210 20% 98%;
-
-    --destructive-100: 4 100% 20%;
-    --destructive: 4 100% 30%;
-    --destructive-300: 0 96.3% 55%;
-
+    --primary-foreground: 0 0% 9%;
+    --destructive-100: 0 73.7% 41.8%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-300: 0 96.3% 89.4%;
     --success-100: 166 97% 20%;
     --success: 166 97% 14%;
     --success-300: 166 97% 60%;
-
-
     --warning-100: 51.72, 93.55%, 17.92%;
     --warning: 47 96% 53%;
     --warning-300: 52 96% 70%;
-
     --add-button-shadow: 0px 0px 0px 6px hsl(var(--primary-100) / 0.5);
-
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
